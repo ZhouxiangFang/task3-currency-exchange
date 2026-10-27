@@ -27,30 +27,21 @@ class Status(Enum):
     NO_RATE = "no_rate"
 
 
-CURRENCY = (
-    "A currency: its ISO code such as USD or usd, its name such as Japanese yen, a common name such as yen or "
-    "dollars, or its Chinese name such as 日元"
-)
+CURRENCY = "An ISO currency code or English name, such as USD, usd, Japanese yen, or yen"
 CODE = "A currency's three-letter ISO code, in capitals, such as USD"
 DATE = "A date written YYYY-MM-DD, such as 2015-03-14"
 STATUS = (
-    "converted: the conversion was made; invalid_amount: the amount is not a number of zero or more; "
-    "no_such_currency: the from currency, or else the to currency, names no currency; ambiguous_currency: it names "
-    "more than one; invalid_date: the date is not a real YYYY-MM-DD date; date_out_of_range: no ECB rates were "
-    "published on or before it, or it is after the last day the data covers; no_rate: the ECB gave no rate for one "
-    "of the currencies on the day the conversion uses"
+    "converted: success; invalid_amount: not a nonnegative plain decimal; no_such_currency: unknown currency; "
+    "ambiguous_currency: multiple matches; invalid_date: not a valid YYYY-MM-DD date; "
+    "date_out_of_range: outside the snapshot; no_rate: a currency has no rate on the selected publication day"
 )
 
 
 @dataclass
 class ConvertInput(Output):
     amount: Annotated[str, "How much to convert, a decimal number such as 1000 or 25.50"]
-    from_currency: Annotated[
-        str, "The currency the amount is in: its ISO code, its name, a common name, or its Chinese name"
-    ]
-    to_currency: Annotated[
-        str, "The currency to convert into: its ISO code, its name, a common name, or its Chinese name"
-    ]
+    from_currency: Annotated[str, "Source currency: ISO code or English name"]
+    to_currency: Annotated[str, "Target currency: ISO code or English name"]
     date: Annotated[str, "The day of the conversion, written YYYY-MM-DD"]
 
 
@@ -61,8 +52,7 @@ class ConvertOutput(Output):
     to_currency: Annotated[str, "The ISO code of the to currency; empty unless status is converted"]
     rate_date: Annotated[
         str,
-        "The ECB publication day whose rates were used, YYYY-MM-DD: the date itself if rates were published that day, "
-        "else the latest earlier publication day; empty unless status is converted",
+        "Latest ECB publication date on or before the requested date; YYYY-MM-DD, or empty unless converted",
     ]
     converted: Annotated[
         str,
@@ -79,7 +69,6 @@ class CurrencyInput(Output):
 class Currency(Output):
     code: Annotated[str, CODE]
     name: Annotated[str, "Its English name"]
-    chinese_name: Annotated[str, "Its Chinese name"]
     first_date: Annotated[str, "The first day the ECB gave a rate for it, YYYY-MM-DD"]
     last_date: Annotated[
         str, "The last day the ECB gave a rate for it, YYYY-MM-DD; there may be days between without one"
@@ -124,7 +113,7 @@ class CalculateInput(Output):
 @dataclass
 class CalculateOutput(Output):
     expression: Annotated[str, "The expression, unchanged"]
-    value: Annotated[str, "Its exact value to 28 significant digits, in plain decimal notation"]
+    value: Annotated[str, "The result in plain decimal notation, calculated with 28-digit precision"]
 
 
 TOOLS = {

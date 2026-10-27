@@ -44,10 +44,8 @@ def verify_currency(name, output_value):
     codes = resolve(name)
     if not codes:
         return result(False, f"{name!r} names no currency, so the tool must fail, not answer")
-    expected = [(code, *CURRENCIES[code][:2], *known_dates(code)) for code in codes]
-    given = [
-        (each.code, each.name, each.chinese_name, each.first_date, each.last_date) for each in output_value.currencies
-    ]
+    expected = [(code, CURRENCIES[code][0], *known_dates(code)) for code in codes]
+    given = [(each.code, each.name, each.first_date, each.last_date) for each in output_value.currencies]
     if output_value.name != name or given != expected:
         return result(False, f"{name!r} means {codes}", expected=expected, given=given)
     return result(True, "output is valid")

@@ -33,14 +33,12 @@ def find_currency(given: CurrencyInput, workspace: Path) -> CurrencyOutput:
     codes = resolve(given.name)
     if not codes:
         raise ValueError(
-            f"no such currency: nothing is called {given.name!r}. Use an ISO code such as USD, a name such as "
-            "Japanese yen or yen, or a Chinese name such as 日元"
+            f"no such currency: {given.name!r}. Use an ISO code such as USD or an English name such as yen."
         )
     currencies = [
         Currency(
             code=code,
             name=CURRENCIES[code][0],
-            chinese_name=CURRENCIES[code][1],
             first_date=known_dates(code)[0],
             last_date=known_dates(code)[1],
         )

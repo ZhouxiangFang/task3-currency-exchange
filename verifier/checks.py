@@ -33,10 +33,10 @@ def folded(text):
 
 
 def names(currencies):
-    """Folded name -> the sorted codes of every currency called that: English, Chinese and other names."""
+    """Folded name -> the sorted codes of every currency called that: English names and aliases."""
     index = {}
-    for code, (name, chinese, others) in currencies.items():
-        for each in {name, chinese, *others}:
+    for code, (name, others) in currencies.items():
+        for each in {name, *others}:
             index.setdefault(folded(each), set()).add(code)
     return {name: sorted(codes) for name, codes in index.items()}
 

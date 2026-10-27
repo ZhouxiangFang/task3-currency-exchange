@@ -93,7 +93,7 @@ def test_refuses_a_wrong_conversion_with_partial_credit(answer: dict, wrong: str
         (("1", "Bitcoin", "EUR", "2020-01-01"), "no_such_currency"),
         (("1", "EUR", "us", "2020-01-01"), "no_such_currency"),
         (("1", "dollar", "EUR", "2020-01-01"), "ambiguous_currency"),
-        (("1", "EUR", "克朗", "2020-01-01"), "ambiguous_currency"),
+        (("1", "EUR", "koruna", "2020-01-01"), "ambiguous_currency"),
         (("1", "USD", "EUR", "2021-02-29"), "invalid_date"),
         (("1", "USD", "EUR", "March 14, 2015"), "invalid_date"),
         (("1", "USD", "EUR", "1999-01-03"), "date_out_of_range"),
@@ -274,7 +274,6 @@ def test_approves_every_true_calculate_output(expression: str, tmp_path: Path) -
                     {
                         "code": "GBP",
                         "name": "Pound sterling",
-                        "chinese_name": "英镑",
                         "first_date": "1999-01-04",
                         "last_date": "2026-10-26",
                     }

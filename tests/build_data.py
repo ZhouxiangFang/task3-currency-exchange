@@ -11,8 +11,7 @@ no rate for it that day. The rules:
 - A rate is kept exactly as the ECB wrote it, as text, so no digit is lost; N/A becomes "-".
 - The euro itself is not a column: one euro is always one euro.
 
-CURRENCIES, written by hand, gives each currency's English name, its Chinese name and the other names people call it
-by. Some of those names belong to several currencies ("dollar", "krone"): a name that does is ambiguous.
+CURRENCIES lists each currency's English name and aliases. Some of those names belong to several currencies ("dollar", "krone"): a name that does is ambiguous.
 """
 
 from __future__ import annotations
@@ -29,50 +28,50 @@ SNAPSHOT_DAY = "2026-10-26"
 SHA256 = "510c545c3ffe7efb3f0918355ed916e3bd89d3f2feef0382c3eb97be5b6ca426"
 MISSING = "N/A"
 
-# code -> (English name, Chinese name, other names); the ECB's currencies, and the euro
+# code -> (English name, aliases); the ECB's currencies, and the euro
 CURRENCIES = {
-    "AUD": ("Australian dollar", "澳大利亚元", ["dollar", "aussie dollar", "澳元"]),
-    "BGN": ("Bulgarian lev", "保加利亚列弗", ["lev", "列弗"]),
-    "BRL": ("Brazilian real", "巴西雷亚尔", ["real", "reais", "雷亚尔"]),
-    "CAD": ("Canadian dollar", "加拿大元", ["dollar", "loonie", "加元"]),
-    "CHF": ("Swiss franc", "瑞士法郎", ["franc", "瑞郎"]),
-    "CNY": ("Chinese yuan renminbi", "人民币", ["yuan", "renminbi", "rmb", "chinese yuan", "元"]),
-    "CYP": ("Cyprus pound", "塞浦路斯镑", ["pound", "cypriot pound"]),
-    "CZK": ("Czech koruna", "捷克克朗", ["koruna", "克朗"]),
-    "DKK": ("Danish krone", "丹麦克朗", ["krone", "克朗"]),
-    "EEK": ("Estonian kroon", "爱沙尼亚克朗", ["kroon", "克朗"]),
-    "EUR": ("Euro", "欧元", ["euro"]),
-    "GBP": ("Pound sterling", "英镑", ["pound", "british pound", "sterling"]),
-    "HKD": ("Hong Kong dollar", "港元", ["dollar", "港币"]),
-    "HRK": ("Croatian kuna", "克罗地亚库纳", ["kuna", "库纳"]),
-    "HUF": ("Hungarian forint", "匈牙利福林", ["forint", "福林"]),
-    "IDR": ("Indonesian rupiah", "印度尼西亚盾", ["rupiah", "印尼盾"]),
-    "ILS": ("Israeli shekel", "以色列新谢克尔", ["shekel", "new shekel", "谢克尔"]),
-    "INR": ("Indian rupee", "印度卢比", ["rupee", "卢比"]),
-    "ISK": ("Icelandic krona", "冰岛克朗", ["krona", "克朗"]),
-    "JPY": ("Japanese yen", "日元", ["yen", "日币"]),
-    "KRW": ("South Korean won", "韩元", ["won", "korean won"]),
-    "LTL": ("Lithuanian litas", "立陶宛立特", ["litas"]),
-    "LVL": ("Latvian lats", "拉脱维亚拉特", ["lats"]),
-    "MTL": ("Maltese lira", "马耳他里拉", ["lira", "里拉"]),
-    "MXN": ("Mexican peso", "墨西哥比索", ["peso", "比索"]),
-    "MYR": ("Malaysian ringgit", "马来西亚林吉特", ["ringgit", "林吉特"]),
-    "NOK": ("Norwegian krone", "挪威克朗", ["krone", "克朗"]),
-    "NZD": ("New Zealand dollar", "新西兰元", ["dollar", "纽元"]),
-    "PHP": ("Philippine peso", "菲律宾比索", ["peso", "比索"]),
-    "PLN": ("Polish zloty", "波兰兹罗提", ["zloty", "兹罗提"]),
-    "ROL": ("Romanian old leu", "罗马尼亚旧列伊", ["leu", "列伊"]),
-    "RON": ("Romanian leu", "罗马尼亚列伊", ["leu", "列伊"]),
-    "RUB": ("Russian rouble", "俄罗斯卢布", ["rouble", "ruble", "russian ruble", "卢布"]),
-    "SEK": ("Swedish krona", "瑞典克朗", ["krona", "克朗"]),
-    "SGD": ("Singapore dollar", "新加坡元", ["dollar", "新元"]),
-    "SIT": ("Slovenian tolar", "斯洛文尼亚托拉尔", ["tolar"]),
-    "SKK": ("Slovak koruna", "斯洛伐克克朗", ["koruna", "克朗"]),
-    "THB": ("Thai baht", "泰铢", ["baht"]),
-    "TRL": ("Turkish old lira", "土耳其旧里拉", ["lira", "里拉"]),
-    "TRY": ("Turkish lira", "土耳其里拉", ["lira", "里拉"]),
-    "USD": ("US dollar", "美元", ["dollar", "american dollar", "us dollar", "u.s. dollar", "美金"]),
-    "ZAR": ("South African rand", "南非兰特", ["rand", "兰特"]),
+    "AUD": ("Australian dollar", ["dollar", "aussie dollar"]),
+    "BGN": ("Bulgarian lev", ["lev"]),
+    "BRL": ("Brazilian real", ["real", "reais"]),
+    "CAD": ("Canadian dollar", ["dollar", "loonie"]),
+    "CHF": ("Swiss franc", ["franc"]),
+    "CNY": ("Chinese yuan renminbi", ["yuan", "renminbi", "rmb", "chinese yuan"]),
+    "CYP": ("Cyprus pound", ["pound", "cypriot pound"]),
+    "CZK": ("Czech koruna", ["koruna"]),
+    "DKK": ("Danish krone", ["krone"]),
+    "EEK": ("Estonian kroon", ["kroon"]),
+    "EUR": ("Euro", ["euro"]),
+    "GBP": ("Pound sterling", ["pound", "british pound", "sterling"]),
+    "HKD": ("Hong Kong dollar", ["dollar"]),
+    "HRK": ("Croatian kuna", ["kuna"]),
+    "HUF": ("Hungarian forint", ["forint"]),
+    "IDR": ("Indonesian rupiah", ["rupiah"]),
+    "ILS": ("Israeli shekel", ["shekel", "new shekel"]),
+    "INR": ("Indian rupee", ["rupee"]),
+    "ISK": ("Icelandic krona", ["krona"]),
+    "JPY": ("Japanese yen", ["yen"]),
+    "KRW": ("South Korean won", ["won", "korean won"]),
+    "LTL": ("Lithuanian litas", ["litas"]),
+    "LVL": ("Latvian lats", ["lats"]),
+    "MTL": ("Maltese lira", ["lira"]),
+    "MXN": ("Mexican peso", ["peso"]),
+    "MYR": ("Malaysian ringgit", ["ringgit"]),
+    "NOK": ("Norwegian krone", ["krone"]),
+    "NZD": ("New Zealand dollar", ["dollar"]),
+    "PHP": ("Philippine peso", ["peso"]),
+    "PLN": ("Polish zloty", ["zloty"]),
+    "ROL": ("Romanian old leu", ["leu"]),
+    "RON": ("Romanian leu", ["leu"]),
+    "RUB": ("Russian rouble", ["rouble", "ruble", "russian ruble"]),
+    "SEK": ("Swedish krona", ["krona"]),
+    "SGD": ("Singapore dollar", ["dollar"]),
+    "SIT": ("Slovenian tolar", ["tolar"]),
+    "SKK": ("Slovak koruna", ["koruna"]),
+    "THB": ("Thai baht", ["baht"]),
+    "TRL": ("Turkish old lira", ["lira"]),
+    "TRY": ("Turkish lira", ["lira"]),
+    "USD": ("US dollar", ["dollar", "american dollar", "us dollar", "u.s. dollar"]),
+    "ZAR": ("South African rand", ["rand"]),
 }
 
 
@@ -111,11 +110,11 @@ def render(dates: list[str], rates: dict[str, list[str]]) -> str:
         "",
         f'{len(dates)} publication days, {dates[0]} to {dates[-1]}; {len(rates)} currencies besides the euro."""',
         "",
-        "# code -> (English name, Chinese name, other names)",
+        "# code -> (English name, aliases)",
         "CURRENCIES = {",
         *(
-            f"    {quoted(code)}: ({quoted(name)}, {quoted(chinese)}, [{', '.join(map(quoted, others))}]),"
-            for code, (name, chinese, others) in CURRENCIES.items()
+            f"    {quoted(code)}: ({quoted(name)}, [{', '.join(map(quoted, others))}]),"
+            for code, (name, others) in CURRENCIES.items()
         ),
         "}",
         "",

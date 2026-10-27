@@ -27,13 +27,13 @@ NAMES = [
     (" usd ", ["USD"]),
     ("US dollar", ["USD"]),
     ("us dollars", ["USD"]),  # a plural s is dropped
-    ("美元", ["USD"]),
+    ("american dollar", ["USD"]),
     ("Japanese yen", ["JPY"]),
     ("YEN", ["JPY"]),
-    ("日元", ["JPY"]),
+    ("yen", ["JPY"]),
     ("euros", ["EUR"]),
     ("EUR", ["EUR"]),
-    ("人民币", ["CNY"]),
+    ("renminbi", ["CNY"]),
     ("Pound sterling", ["GBP"]),
     ("sterling", ["GBP"]),
     ("lats", ["LVL"]),  # a name that ends in s
@@ -46,7 +46,7 @@ NAMES = [
     ("lira", ["MTL", "TRL", "TRY"]),
     ("leu", ["ROL", "RON"]),
     ("peso", ["MXN", "PHP"]),
-    ("克朗", ["CZK", "DKK", "EEK", "ISK", "NOK", "SEK", "SKK"]),
+    ("koruna", ["CZK", "SKK"]),
 ]
 NO_CURRENCY = ["Bitcoin", "BTC", "XYZ", "us", "", "   ", "dollarz", "Japanese", "yuan renminbi dollar"]
 
@@ -186,7 +186,12 @@ def test_conversions_agree_with_the_csv_and_fractions() -> None:
     [
         (("1000", "USD", "JPY", "2015-03-14"), Status.CONVERTED, "2015-03-13", "121462.35"),  # a Saturday
         (("1000", "US dollars", "yen", "2015-03-14"), Status.CONVERTED, "2015-03-13", "121462.35"),
-        (("100", "美元", "人民币", "2020-01-01"), Status.CONVERTED, "2019-12-31", "696.15"),  # New Year's Day
+        (
+            ("100", "american dollar", "renminbi", "2020-01-01"),
+            Status.CONVERTED,
+            "2019-12-31",
+            "696.15",
+        ),  # New Year's Day
         (("1", "usd", "usd", "2016-03-25"), Status.CONVERTED, "2016-03-24", "1.00"),  # Good Friday
         (("0", "USD", "JPY", "2020-01-02"), Status.CONVERTED, "2020-01-02", "0.00"),
         (("100", "CYP", "EUR", "2007-12-31"), Status.CONVERTED, "2007-12-31", "170.86"),  # its last day
@@ -218,9 +223,9 @@ def test_each_conversion_has_the_status_worked_out_by_hand(trip, status, rate_da
 def test_finds_every_currency_a_name_may_mean(tmp_path: Path) -> None:
     found = find_currency(CurrencyInput(name="pound"), tmp_path)
     assert found.name == "pound"
-    assert [(c.code, c.name, c.chinese_name, c.first_date, c.last_date) for c in found.currencies] == [
-        ("CYP", "Cyprus pound", "塞浦路斯镑", "1999-01-04", "2007-12-31"),
-        ("GBP", "Pound sterling", "英镑", "1999-01-04", "2026-10-26"),
+    assert [(c.code, c.name, c.first_date, c.last_date) for c in found.currencies] == [
+        ("CYP", "Cyprus pound", "1999-01-04", "2007-12-31"),
+        ("GBP", "Pound sterling", "1999-01-04", "2026-10-26"),
     ]
     with pytest.raises(ValueError, match="no such currency"):
         find_currency(CurrencyInput(name="Bitcoin"), tmp_path)

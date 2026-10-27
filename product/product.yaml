@@ -1,12 +1,12 @@
 _ > nanoagent.plugin.v0001.ProductConfig:
-tagline: "Convert money between currencies at the ECB rates of any day since 1999"
-summary: "Input: an amount, two currencies and a date. A currency can be an ISO code such as USD, a name such as yen or US dollars, or a Chinese name such as 日元. The agent looks the currencies up in a frozen snapshot of the European Central Bank's euro reference rates, finds the rates of that day or of the last working day before it, and works out the conversion. Output: a status, the two currency codes, the day whose rates were used, and the converted amount, such as 121462.35 yen for 1000 US dollars on Saturday 2015-03-14, at Friday's rates. When it cannot convert, the status says why: an invalid amount or date, a currency that does not exist or is ambiguous, a date outside the data, or a currency with no rate that day. A deterministic verifier checks the answer against the data."
+tagline: "Convert currencies using historical exchange rates"
+summary: "Enter an amount, two currencies, and a date. The agent looks up ECB reference rates and calculates the conversion. Weekends and holidays use the latest earlier published rates. Data covers January 4, 1999 to October 26, 2026."
 highlights:
-  - "Currencies by code, English name or Chinese name, with ambiguous names such as dollar caught"
-  - "Weekends and holidays fall back to the last day the ECB published rates"
-  - "Real gaps in the data, such as Iceland's crisis years and currencies replaced by the euro, have their own status"
-  - "No model and no network in the verifier: 7,122 days of ECB rates for 41 currencies, pinned by SHA-256"
+  - "Use currency codes or English names, such as USD or Japanese yen"
+  - "See the converted amount and the date of the rates used"
+  - "Get a clear reason when a conversion is unavailable"
+  - "Every answer is checked against a fixed ECB dataset"
 steps:
-  - "Ask for a conversion, such as \"How many yen was 1000 US dollars on 2015-03-14?\""
-  - "The agent looks up both currencies and the rates of that day and the days before it"
-  - "It works out the converted amount, or says why it cannot, and the verifier judges the answer"
+  - "Ask: Convert 1000 USD to JPY on March 14, 2015"
+  - "The agent looks up the currencies and historical rates"
+  - "View the conversion and its verification result"
