@@ -1,0 +1,51 @@
+_ > nanoagent.plugin.v0001.ManifestConfig:
+id: currency-exchange
+name: Currency Exchange
+version: 0.1.0
+status: ready
+spec: nanoagent.plugin/v0001
+
+runtime > nanoagent.plugin.v0001.RuntimeConfig:
+  type: mcp_stdio
+  command: [uv, run, --frozen, python, -m, plugin]
+
+permissions > nanoagent.plugin.v0001.PermissionsConfig:
+  network > nanoagent.plugin.v0001.NetworkConfig:
+    hosts: []
+  filesystem > nanoagent.plugin.v0001.FilesystemConfig:
+    write: [workspace]
+
+# One entry per contract.Tool; its input and output classes are contract.TOOLS's.
+tools > dict[contract.Tool, nanoagent.plugin.v0001.ToolConfig]:
+  find_currency:
+    description: |-
+      Find every currency a name may mean. Set name to the from or to currency from the task input, unchanged.
+      A three-letter ISO code (USD, usd) means that currency. Otherwise the name matches whatever its case and accents, in English (Japanese yen, yen, US dollars) or Chinese (日元); a plural "s" is fine.
+      Returns {"name": "<name>", "currencies": [{"code", "name", "chinese_name", "first_date", "last_date"}, ...]}, sorted by code. Several currencies mean the name is ambiguous: "dollar" may be USD, AUD, CAD and others. first_date and last_date bound the days the ECB gave it a rate; some days between may still have none.
+      A name that means nothing returns an error that starts "no such currency".
+  get_rates:
+    description: |-
+      Get the ECB euro reference rates published on one day. Set date to YYYY-MM-DD and currencies to ISO codes, each once; EUR is allowed.
+      Returns {"date", "weekday", "published": true or false, "rates": [{"currency": "<code>", "rate": "<units per euro>"}, ...]}. A rate is how many units of the currency one euro bought, exactly as the ECB wrote it; EUR is always "1"; an empty rate means the ECB gave none for that currency that day.
+      The ECB publishes only on working days: on weekends and TARGET holidays published is false and rates is empty.
+      For example, {"date": "2015-03-13", "currencies": ["USD", "JPY"]} gives USD 1.0572 and JPY 128.41: one euro bought 1.0572 dollars or 128.41 yen.
+      An unknown code, a date that is not real, or a date outside the data (1999-01-04 to 2026-10-26) returns an error that says which.
+  calculate:
+    description: |-
+      Work out arithmetic exactly. Set expression to decimal numbers with + - * / and parentheses, such as "1000 * 128.41 / 1.0572".
+      Returns {"expression", "value"}: the exact value to 28 significant digits. Division by zero or anything else returns an error.
+
+# One entry per contract.Task; its input class is contract.TASKS's.
+tasks > dict[contract.Task, nanoagent.plugin.v0001.TaskConfig]:
+  convert-currency:
+    description: Given an amount, two currencies and a date, convert the amount at the ECB euro reference rates of that date, or of the last working day before it, or say why it cannot be done
+    runner: agent
+    tools: [find_currency, get_rates, calculate]
+    reference: null
+    instructions: |-
+      Submit {"status": ..., "from_currency": ..., "to_currency": ..., "rate_date": ..., "converted": ...}. Every field but status is empty unless status is converted. Check in this order and submit the first status that applies. Make each turn's calls in parallel: turns are limited.
+      1. If the amount is not digits with at most one decimal point, such as 1000 or 25.50, submit invalid_amount.
+      2. Call find_currency for the from and the to currency. If the from currency's call fails, submit no_such_currency; if it gives several currencies, submit ambiguous_currency. Otherwise do the same for the to currency.
+      3. Call get_rates with both codes for the date and for each of the four days before it, in parallel. If the call for the date itself fails, submit invalid_date for a date that is not real, or date_out_of_range for one outside the data. Ignore failures for the earlier days.
+      4. The rate day is the date if published is true for it, else the latest of the earlier days that is published. If none of them is published, submit date_out_of_range. If the rate day gives an empty rate for either currency, submit no_rate.
+      5. Otherwise call calculate on amount * to_rate / from_rate, round the value half up to 2 decimal places, and submit converted with the two codes, the rate day as rate_date, and the rounded amount, such as "121462.35".
